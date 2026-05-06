@@ -3,124 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <title>Painel Administrativo - Portal BI</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        .section-card { margin-bottom: 30px; border-radius: 15px; }
-        .table-container { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body {
+            background: #f5f7fb;
+        }
+
+        .navbar {
+            background: #0a3d78;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            border-radius: 8px;
+        }
+
+        h4 {
+            font-weight: 600;
+        }
     </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#">Painel Admin - Portal BI</a>
-            <div class="d-flex">
-                <a href="/" class="btn btn-light btn-sm me-2">Ver Portal</a>
-                <a href="/logout" class="btn btn-danger btn-sm">Sair</a>
-            </div>
-        </div>
-    </nav>
-
+<nav class="navbar navbar-dark mb-4">
     <div class="container">
-        <div class="row">
-            <div class="col-md-5">
-                <div class="card section-card shadow-sm">
-                    <div class="card-header bg-dark text-white"><h5>Novo Usuário</h5></div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <input type="hidden" name="add_user" value="1">
-                            <div class="mb-3">
-                                <label class="form-label">Nome Completo</label>
-                                <input type="text" name="nome" class="form-control" placeholder="Ex: João Silva" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Usuário (Login)</label>
-                                <input type="text" name="usuario" class="form-control" placeholder="joao.silva" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Senha Inicial</label>
-                                <input type="password" name="senha" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Departamento</label>
-                                <select name="departamento" class="form-select" required>
-                                    <option value="Financeiro">Financeiro</option>
-                                    <option value="Logística">Logística</option>
-                                    <option value="Vendas">Vendas</option>
-                                    <option value="RH">RH</option>
-                                    <option value="Diretoria">Diretoria</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cadastrar Usuário</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-7">
-                <div class="card section-card shadow-sm">
-                    <div class="card-header bg-dark text-white"><h5>Novo Dashboard (Power BI)</h5></div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <input type="hidden" name="add_dash" value="1">
-                            <div class="mb-3">
-                                <label class="form-label">Título do BI</label>
-                                <input type="text" name="titulo" class="form-control" placeholder="Ex: Faturamento Mensal" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Link de Incorporação (iframe src)</label>
-                                <input type="text" name="link" class="form-control" placeholder="https://app.powerbi.com/view?..." required>
-                                <small class="text-muted">Use o link gerado em "Publicar na Web".</small>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Liberar para Departamento:</label>
-                                <select name="departamento" class="form-select" required>
-                                    <option value="Financeiro">Financeiro</option>
-                                    <option value="Logística">Logística</option>
-                                    <option value="Vendas">Vendas</option>
-                                    <option value="RH">RH</option>
-                                    <option value="Diretoria">Diretoria</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100">Vincular Dashboard</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-12">
-                <h4 class="mb-3">Usuários Cadastrados</h4>
-                <div class="table-container shadow-sm mb-5">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Login</th>
-                                <th>Departamento</th>
-                                <th>Admin?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for u in usuarios %}
-                            <tr>
-                                <td>{{ u[0] }}</td>
-                                <td>{{ u[1] }}</td>
-                                <td>{{ u[2] }}</td>
-                                <td><span class="badge bg-secondary">{{ u[4] }}</span></td>
-                                <td>{{ 'Sim' if u[5] == 1 else 'Não' }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <span class="navbar-brand">⚙️ Portal BI - Admin</span>
+        <div>
+            <a href="/index" class="btn btn-light btn-sm me-2">Voltar</a>
+            <a href="/logout" class="btn btn-outline-light btn-sm">Sair</a>
         </div>
     </div>
+</nav>
+
+<div class="container">
+
+    <!-- CADASTROS -->
+    <div class="row g-4">
+
+        <!-- DEPARTAMENTO -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Cadastrar Departamento</h5>
+                <form method="POST">
+                    <input type="hidden" name="add_dept">
+                    <input type="text" name="departamento" class="form-control mb-2" placeholder="Ex: Financeiro" required>
+                    <button class="btn btn-primary w-100">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- USUÁRIO -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Cadastrar Usuário</h5>
+                <form method="POST">
+                    <input type="hidden" name="add_user">
+
+                    <input type="text" name="username" class="form-control mb-2" placeholder="Usuário" required>
+                    <input type="password" name="senha" class="form-control mb-2" placeholder="Senha" required>
+
+                    <select name="departamento_id" class="form-select mb-2" required>
+                        <option value="">Departamento</option>
+                        {% for d in departamentos %}
+                            <option value="{{ d[0] }}">{{ d[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn btn-success w-100">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- BI -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Cadastrar BI</h5>
+                <form method="POST">
+                    <input type="hidden" name="add_bi">
+
+                    <input type="text" name="nome" class="form-control mb-2" placeholder="Nome do BI" required>
+                    <input type="text" name="url" class="form-control mb-2" placeholder="Link do Power BI" required>
+
+                    <select name="departamento_id" class="form-select mb-2" required>
+                        <option value="">Departamento</option>
+                        {% for d in departamentos %}
+                            <option value="{{ d[0] }}">{{ d[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- 🔥 AQUI FOI CORRIGIDO -->
+                    <select name="pasta_id" class="form-select mb-2">
+                        <option value="">Sem Pasta</option>
+                        {% for p in pastas %}
+                            <option value="{{ p[0] }}">{{ p[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn btn-warning w-100">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- PASTA -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Cadastrar Pasta</h5>
+
+                <form method="POST">
+                    <input type="hidden" name="add_pasta">
+
+                    <input type="text" name="nome_pasta" class="form-control mb-2" placeholder="Nome da Pasta" required>
+
+                    <select name="departamento_id" class="form-select mb-2" required>
+                        <option value="">Departamento</option>
+                        {% for d in departamentos %}
+                            <option value="{{ d[0] }}">{{ d[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn btn-secondary w-100">Cadastrar</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LISTAGENS -->
+    <div class="row mt-5 g-4">
+
+        <!-- DEPARTAMENTOS -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Departamentos</h5>
+                <table class="table table-sm">
+                    {% for d in departamentos %}
+                    <tr>
+                        <td>{{ d[1] }}</td>
+                        <td class="text-end">
+                            <a href="/delete_dept/{{ d[0] }}" class="btn btn-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <!-- USUÁRIOS -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Usuários</h5>
+                <table class="table table-sm">
+                    {% for u in usuarios %}
+                    <tr>
+                        <td>{{ u[1] }}</td>
+                        <td class="text-end">
+                            <a href="/delete_user/{{ u[0] }}" class="btn btn-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <!-- DASHBOARDS -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Dashboards</h5>
+                <table class="table table-sm">
+                    {% for b in dashboards %}
+                    <tr>
+                        <td>{{ b[1] }}</td>
+                        <td class="text-end">
+                            <a href="/delete_bi/{{ b[0] }}" class="btn btn-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>

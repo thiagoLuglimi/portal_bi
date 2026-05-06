@@ -1,69 +1,239 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Inteligência de Dados</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --primary-color: #0d6efd; --dark-bg: #f8f9fa; }
-        body { background-color: var(--dark-bg); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar { background: linear-gradient(90deg, #002f6c 0%, #0056b3 100%); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .bi-card { border: none; border-radius: 15px; transition: transform 0.3s; background: #fff; overflow: hidden; }
-        .bi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .card-header { background: #fff; border-bottom: 1px solid #eee; font-weight: bold; color: #002f6c; }
-        .iframe-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
-        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 0 0 15px 15px; }
-        .welcome-text { color: #666; font-size: 0.9rem; }
-    </style>
+<meta charset="UTF-8">
+<title>Portal BI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #0a3d78;
+    padding: 12px 20px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.navbar-user {
+    color: white;
+    font-weight: 500;
+}
+
+/* FILTRO */
+.filtro {
+    padding: 20px;
+}
+
+.filtro button {
+    margin-right: 10px;
+    border-radius: 20px;
+}
+
+.filtro button.active {
+    background: #0a3d78;
+    color: white;
+}
+
+/* GRID */
+.grid-bi {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* CARD */
+.card-bi {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.card-bi:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* TITULO PASTA */
+.titulo-pasta {
+    margin: 20px;
+    font-weight: 600;
+}
+
+#area-bi {
+    display: none;
+    height: 100vh;
+    overflow: hidden;
+    background: #e9edf5;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* CONTAINER DE ESCALA */
+#container-bi {
+    transform-origin: top center;
+}
+
+/* IFRAME ORIGINAL */
+#frame-bi {
+    width: 1800px;
+    height: 900px;
+    border: none;
+}
+
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-600px); /* metade do BI */
+    z-index: 999;
+}
+</style>
 </head>
+
 <body>
-    <nav class="navbar navbar-dark sticky-top mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-chart-pie me-2"></i> PORTAL BI</a>
-            <div class="d-flex align-items-center">
-                <span class="text-white me-3 d-none d-md-inline welcome-text">Bem-vindo, <strong>{{ current_user.nome }}</strong></span>
-                {% if current_user.is_admin %}
-                <a href="/admin" class="btn btn-light btn-sm me-2"><i class="fas fa-cog"></i> Admin</a>
-                {% endif %}
-                <a href="/logout" class="btn btn-outline-light btn-sm"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            </div>
-        </div>
-    </nav>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12 mb-4">
-                <h2 class="fw-bold">Dashboards: {{ current_user.departamento }}</h2>
-                <p class="text-muted">Abaixo estão os indicadores atualizados da sua área.</p>
-            </div>
-        </div>
+<!-- 🔵 NAVBAR -->
+<nav class="navbar d-flex justify-content-between align-items-center">
 
-        <div class="row">
-            {% if dashs %}
-                {% for dash in dashs %}
-                <div class="col-12 mb-5">
-                    <div class="card bi-card shadow-sm">
-                        <div class="card-header d-flex justify-content-between align-items-center p-3">
-                            <span><i class="fas fa-table me-2"></i> {{ dash[1] }}</span>
-                            <span class="badge bg-primary rounded-pill">{{ current_user.departamento }}</span>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="iframe-container">
-                                <iframe src="{{ dash[2] }}" frameborder="0" allowFullScreen="true"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-folder-open fa-3x text-secondary mb-3"></i>
-                    <p class="fs-5">Nenhum dashboard disponível para você no momento.</p>
-                </div>
-            {% endif %}
-        </div>
+    <div class="d-flex align-items-center">
+        <span class="navbar-brand text-white">📊 Portal BI</span>
     </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <span class="navbar-user">
+            👤 {{ current_user.username }}
+        </span>
+
+        <a href="/logout" class="btn btn-light btn-sm">Sair</a>
+    </div>
+
+</nav>
+
+
+
+
+<!-- 🟡 FILTRO -->
+<div class="filtro">
+
+    <button class="btn btn-outline-primary active" onclick="filtrar('todas', this)">
+        Todas
+    </button>
+
+    {% for pasta in estrutura.keys() %}
+        <button class="btn btn-outline-primary" onclick="filtrar('{{ pasta }}', this)">
+            {{ pasta }}
+        </button>
+    {% endfor %}
+
+</div>
+
+<!-- 🟢 LISTA -->
+<div id="area-lista">
+
+    {% for pasta, bis in estrutura.items() %}
+        <h5 class="titulo-pasta" data-pasta="{{ pasta }}">📁 {{ pasta }}</h5>
+
+        <div class="grid-bi grupo" data-pasta="{{ pasta }}">
+            {% for nome, url in bis %}
+                <div class="card-bi" onclick="abrirBI('{{ url }}')">
+                    <h6>📊 {{ nome }}</h6>
+                    <small class="text-muted">{{ pasta }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+</div>
+
+<!-- 🔥 BI FULL -->
+<div id="area-bi">
+
+    <button class="btn btn-primary btn-voltar" onclick="voltar()">
+        ⬅ Voltar
+    </button>
+
+    <div id="container-bi">
+        <iframe id="frame-bi"></iframe>
+    </div>
+
+</div>
+
+<script>
+
+// FILTRO
+function filtrar(pasta, btn) {
+
+    document.querySelectorAll(".filtro button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    let grupos = document.querySelectorAll(".grupo");
+    let titulos = document.querySelectorAll(".titulo-pasta");
+
+    grupos.forEach(g => {
+        g.style.display = (pasta === "todas" || g.dataset.pasta === pasta) ? "grid" : "none";
+    });
+
+    titulos.forEach(t => {
+        t.style.display = (pasta === "todas" || t.dataset.pasta === pasta) ? "block" : "none";
+    });
+}
+
+// ABRIR BI
+function abrirBI(url) {
+    document.getElementById("area-lista").style.display = "none";
+    document.getElementById("area-bi").style.display = "block";
+    document.getElementById("frame-bi").src = url;
+}
+
+// VOLTAR
+function voltar() {
+    document.getElementById("area-lista").style.display = "block";
+    document.getElementById("area-bi").style.display = "none";
+    document.getElementById("frame-bi").src = "";
+}
+
+function ajustarZoom() {
+    let larguraTela = window.innerWidth;
+    let larguraBI = 1800;
+
+    let escala = larguraTela / larguraBI;
+
+    if (escala > 1) escala = 1; // não aumenta, só reduz
+
+    document.getElementById("container-bi").style.transform = `scale(${escala})`;
+}
+
+// quando abrir BI
+function abrirBI(url) {
+    document.getElementById("area-lista").style.display = "none";
+    document.getElementById("area-bi").style.display = "flex";
+    document.getElementById("frame-bi").src = url;
+
+    ajustarZoom();
+}
+
+// quando redimensionar tela
+window.addEventListener("resize", ajustarZoom);
+
+</script>
+
 </body>
 </html>
