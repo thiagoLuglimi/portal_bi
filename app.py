@@ -16,7 +16,11 @@ DB_NAME = 'database.db'
 # BANCO
 # ---------------------------
 def conectar():
-    return sqlite3.connect(DB_NAME)
+    return sqlite3.connect(
+        DB_NAME,
+        timeout=30,
+        check_same_thread=False
+    )
 
 def init_db():
     con = conectar()
